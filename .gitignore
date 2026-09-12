@@ -1,0 +1,4 @@
+build/mathtext/
+figures/*_prev.png
+__pycache__/
+*.pyc
