@@ -3,7 +3,7 @@
 %  Springer LNCS (llncs.cls v2.24) conference manuscript
 %
 %  Compile with:  pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
-%  Page limit: 17 pages including references, tables and figures.
+%  Page limit: 20 pages including references, tables and figures.
 % =====================================================================
 \documentclass[runningheads]{llncs}
 
@@ -120,53 +120,84 @@ respecting legitimate riwayah variation.
 \subsection{Qur'anic Speech Resources and Recognition}
 
 Existing Qur'anic speech resources differ considerably in scale, speaker
-diversity, recording conditions, annotation granularity and intended use.
-Verse-level repositories such as EveryAyah~\cite{everyayah} link recordings to
-verses but provide no temporal Tajweed annotation. The Tarteel
-dataset~\cite{khan2023tarteel} contributes about 25{,}000 verse recordings
-(67.39\,h) from more than 1{,}200 speakers under realistic conditions, yet its
-annotations link audio to text rather than to rule realisations.
-Ar-DAD~\cite{ardad} (15{,}810 clips from 30 reciters plus 397 imitator
-recordings) targets speaker identification; QDAT~\cite{qdat} provides expert
-judgements on three rules from over 150 readers but with narrow coverage and
-heterogeneous recordings; and a crowdsourced corpus of about 7{,}000 recitations
-from 1{,}287 participants~\cite{quranic_audio_crowd} offers only category-level
-labels (crowd accuracy 0.77, inter-rater agreement 0.63). Large-scale ASR
-corpora---581{,}216 ayah recordings ($\approx$2{,}882\,h, 44
-reciters)~\cite{quran_recitations_asr} and the 263{,}263-recording
-Quran-Ayah-Corpus with speaker-disjoint partitions~\cite{quran_ayah_corpus}---
-prioritise transcription over pronunciation correctness. Transmission-aware
-resources are more recent: the Annotated Quranic Qira'at
-Dataset~\cite{smail2024aqqd} adds qira'at and phonetic-variation metadata to
-24{,}183 recordings from 309 reciters, and Riwaya-ID~\cite{riwaya_id} separates
-Warsh from Hafs with 82\% accuracy using wav2vec~2.0~\cite{baevski2020wav2vec}
-and Whisper~\cite{radford2023whisper}. Collectively these resources trade
-lexical and speaker coverage against rule-level, temporally localised
-supervision, so corpus size alone cannot satisfy the requirements of automatic
-Tajweed recognition.
+diversity, recording conditions, annotation granularity and intended use
+(Table~\ref{tab:corpora}). Verse-level repositories such as
+EveryAyah~\cite{everyayah} link recordings to verses but provide no temporal
+Tajweed annotation, and the large-scale ASR corpora---the 581{,}216-recording
+Quran Recitations corpus~\cite{quran_recitations_asr} and the speaker-disjoint
+Quran-Ayah-Corpus~\cite{quran_ayah_corpus}---prioritise transcription over
+pronunciation correctness. Diversity-oriented resources
+(Tarteel~\cite{khan2023tarteel}, Ar-DAD~\cite{ardad}, QDAT~\cite{qdat} and the
+crowdsourced corpus of non-Arabic-speaking reciters~\cite{quranic_audio_crowd})
+contribute speakers, realistic conditions or expert judgements, but only text-
+or category-level supervision. Transmission-aware resources are the most recent
+step: AQQD~\cite{smail2024aqqd} adds qira'at and phonetic-variation metadata and
+Riwaya-ID~\cite{riwaya_id} separates Warsh from Hafs with 82\% accuracy using
+wav2vec~2.0~\cite{baevski2020wav2vec} and Whisper~\cite{radford2023whisper}, yet
+neither provides temporally localised rule labels. Collectively these resources
+trade lexical and speaker coverage against rule-level supervision, so corpus
+size alone cannot satisfy the requirements of automatic Tajweed recognition.
+
+\begin{table}[t]
+\centering
+\caption{Comparison of Qur'anic speech resources. ``Rule-level temporal
+labels'' indicates whether the resource localises individual Tajweed
+phenomena in time.}
+\label{tab:corpora}
+\begin{tabular}{lllll}
+\hline
+Resource & Recordings & Speakers & Supervision & Rule-level \
+\hline
+EveryAyah~\cite{everyayah} & verse-level & professional & verse--audio link & no \
+Tarteel~\cite{khan2023tarteel} & $\approx$25{,}000 (67.39\,h) & $>$1{,}200 & audio--text & no \
+Ar-DAD~\cite{ardad} & 15{,}810 $+$ 397 & 30 $+$ 12 & reciter identity & no \
+QDAT~\cite{qdat} & $>$1{,}500 & $>$150 & 3 rules, expert & categorical \
+Crowdsourced~\cite{quranic_audio_crowd} & $\approx$7{,}000 (1{,}166 ann.) & 1{,}287 & 6 categories & categorical \
+Quran Recitations~\cite{quran_recitations_asr} & 581{,}216 ($\approx$2{,}882\,h) & 44 & transcript & no \
+Quran-Ayah-Corpus~\cite{quran_ayah_corpus} & 263{,}263 & 44 & transcript, disjoint splits & no \
+AQQD~\cite{smail2024aqqd} & 24{,}183 & 309 & qira'at metadata & partial \
+Riwaya-ID~\cite{riwaya_id} & $>$700\,h & -- & riwayah label (82\%) & no \
+Ours & 7{,}998 (11.17\,h) & 15 & rule-level, expert-verified & yes \
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Automatic Tajweed Recognition}
 
 Acoustic Tajweed assessment began with phoneme-duration analysis of Madd and
-Ghunnah from ten reciters~\cite{mohammed2018madd}, showing temporal cues to be
-interpretable but rate-sensitive. Qalqalah has received particular attention,
-from MFCC representations with vector quantisation~\cite{qalqalah_vq} to
-multilayer perceptrons for Qalqalah Kubra~\cite{qalqalah_mlp}.
-Smartajweed~\cite{alagrami2021smartajweed} cast recognition as several binary
-acoustic problems (Idgham Meem, Ikhfaa Meem, Tafkheem Lam, Tarqeeq Lam) with
-filter-bank features and radial-basis-function SVMs, reporting 99\% validation
-accuracy under restricted conditions. Convolutional networks with MFCC inputs
-reached 90.8\% validation accuracy for Qalqalah from 3{,}322 samples of four
-professional reciters~\cite{omran2023cnn}, while recurrent models on QDAT
-reported 77.0\%, 59.4\% and 66.1\% for Al-Madd al-Munfasil, Al-Ghunnah
-al-Mushaddadah and Al-Ikhfaa~\cite{alahjal2023lstm}. Hybrid pipelines combine ASR
-and forced alignment with a dedicated classifier: TajweedAI~\cite{tajweedai}
-reached 100\% accuracy internally but 57.14\% externally, showing that
-controlled-condition performance does not imply robust generalisation. Two
-conclusions recur: Tajweed phenomena are not equally separable acoustically, and
-accuracy alone is insufficient under class imbalance. Idgham and Qalqalah
-nonetheless remain fragmented across datasets, features and protocols, with no
-unified framework spanning multiple reciters and traditions.
+Ghunnah~\cite{mohammed2018madd} and progressed through MFCC-based statistical
+and neural classifiers for Qalqalah~\cite{qalqalah_vq,qalqalah_mlp}, binary SVM
+formulations~\cite{alagrami2021smartajweed}, convolutional~\cite{omran2023cnn}
+and recurrent~\cite{alahjal2023lstm} models, and hybrid ASR--classification
+pipelines~\cite{tajweedai} (Table~\ref{tab:systems}). Three conclusions recur
+across these settings: Tajweed phenomena are not equally separable acoustically;
+accuracy alone is insufficient under class imbalance; and performance obtained
+under controlled conditions does not imply robust generalisation to unseen
+speakers, recordings or riwayat. Idgham and Qalqalah nonetheless remain
+fragmented across datasets, feature representations and evaluation protocols,
+with no unified framework spanning multiple reciters and transmission
+traditions.
+
+\begin{table}[t]
+\centering
+\caption{Prior automatic Tajweed recognition systems compared with the present
+study. Acc.\ = accuracy; val.\ = validation.}
+\label{tab:systems}
+\begin{tabular}{llllll}
+\hline
+Study & Rules & Representation & Model & Data & Reported result \
+\hline
+Mohammed et al.~\cite{mohammed2018madd} & Madd, Ghunnah & duration & threshold & 10 reciters & interpretable cues \
+Qalqalah VQ~\cite{qalqalah_vq} & Qalqalah & MFCC & vector quant. & -- & feasibility \
+Qalqalah MLP~\cite{qalqalah_mlp} & Qalqalah Kubra & MFCC & MLP & -- & feasibility \
+Smartajweed~\cite{alagrami2021smartajweed} & 4 binary rules & filter bank & RBF-SVM & -- & 99\% val.\ acc. \
+Omran et al.~\cite{omran2023cnn} & Qalqalah & MFCC & CNN & 3{,}322 / 4 rec. & 90.8\% val.\ acc. \
+Al-ahjal et al.~\cite{alahjal2023lstm} & 3 rules & MFCC & LSTM & $>$1{,}500 (QDAT) & 77.0/59.4/66.1\% \
+TajweedAI~\cite{tajweedai} & Qalqalah & ASR $+$ alignment & hybrid & internal/ext. & 100\% / 57.14\% \
+Ours & 2 Idgham $+$ 3 Qalqalah & 8 descriptors & 5 classifiers & 7{,}998 / 15 rec. & Macro-F1 0.6935 \
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Research Gap and Positioning}
 
@@ -384,7 +415,28 @@ structure of the acoustic event), and duration (temporal extent of the
 rule-related event). Segment-level statistics are used so that every descriptor
 is defined uniformly across instances of differing length, and each corresponds
 to an acoustic dimension that Tajweed theory predicts to be affected by
-assimilation, nasalisation or consonantal release.
+assimilation, nasalisation or consonantal release (Table~\ref{tab:features}).
+
+\begin{table}[t]
+\centering
+\caption{The eight acoustic descriptors and their relation to Tajweed
+realisation.}
+\label{tab:features}
+\begin{tabular}{lll}
+\hline
+Descriptor & Acoustic dimension & Tajweed relevance \\
+\hline
+RMS mean & signal energy & overall intensity of the rule event \\
+ZCR mean & temporal fine structure & noise-like transition at assimilation \\
+Spectral-centroid mean & spectral distribution & brightness change at release \\
+Spectral-flux mean & spectral change & rapid transition of Qalqalah release \\
+Mean nasality & average nasal coupling & ghunnah of Idgham bi-Ghunnah \\
+Peak nasality & maximal nasal coupling & strength of nasalisation \\
+Depth metric & prominence / internal structure & articulatory depth of the event \\
+Duration & temporal extent & assimilation and prolongation timing \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Redundancy, Normalisation and Cleaning}
 
@@ -438,12 +490,20 @@ $\frac{1}{2}\|\mathbf{w}\|^2 + C\sum_i \xi_i$ subject to
 $y_i(\mathbf{w}^{T}\phi(\mathbf{x}_i)+b) \geq 1-\xi_i$, combining binary
 decision functions for the five-class task; it suits compact descriptors but is
 sensitive to scaling and kernel choice. The random forest (RF) aggregates
-bootstrap-trained trees over randomised feature subsets by majority vote,
+bootstrap-trained trees over randomised feature subsets,
+\begin{equation}
+\hat{y} = \mathrm{mode}\{T_b(\mathbf{x})\}_{b=1}^{B},
+\label{eq:rf}
+\end{equation}
 modelling nonlinear descriptor interactions and providing importance
 estimates.
 $k$-nearest neighbours (KNN) assigns the majority class among the $k$ closest
-training observations in feature space, serving as an instance-based baseline
-sensitive to
+training observations,
+\begin{equation}
+\hat{y} = \mathrm{mode}\{y_i : \mathbf{x}_i \in \mathcal{N}_k(\mathbf{x})\},
+\label{eq:knn}
+\end{equation}
+serving as an instance-based baseline sensitive to
 local acoustic similarity. XGBoost~\cite{chen2016xgboost} builds an additive
 ensemble $\hat{y}_i = \sum_{t=1}^{T} f_t(\mathbf{x}_i)$ over regression trees,
 optimising a regularised objective
@@ -500,7 +560,27 @@ tree-based importance and ablation; \textbf{E6} compares the imbalance-handling
 configurations of Sect.~\ref{sec:imbalance}; and \textbf{E7} tests cross-riwayah
 generalisation by training on one riwayah and evaluating on another for all six
 ordered pairs. Uncertainty is estimated by bootstrap resampling of the test set
-(1{,}000 resamples).
+(1{,}000 resamples). Table~\ref{tab:experiments} summarises the design.
+
+\begin{table}[t]
+\centering
+\caption{Experimental design: question, protocol and primary metrics of each
+experiment family.}
+\label{tab:experiments}
+\begin{tabular}{llll}
+\hline
+ID & Question & Protocol & Primary metrics \\
+\hline
+E1 & Does the representation support recognition? & 5 classifiers, cleaned data & Acc., bal.\ acc., Macro-F1 \\
+E2 & Is it better than MFCC? & identical protocol, MFCC baseline & Macro-F1, Acc. \\
+E3 & Which classes drive performance? & normalised confusion matrices & per-class recall \\
+E4 & How separable are the classes? & one-vs-rest ROC / PR & ROC-AUC, PR \\
+E5 & Which descriptors matter? & importance $+$ ablation & Macro-F1 change \\
+E6 & Does balancing help? & 5 training configurations & bal.\ acc., minority recall \\
+E7 & Does it transfer across riwayat? & 6 train$\rightarrow$test pairs & Macro-F1 \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsubsection{Protocol details to be finalised.}
 A held-out test set provides final evaluation and 5-fold cross-validation is
@@ -568,68 +648,63 @@ absolute gain of the proposed representation.}
 
 \subsection{Per-Class Behaviour, Confusion and Discriminability}
 
-Per-class results differ sharply (Table~\ref{tab:perclass}). Idgham bi-Ghunnah
-is recognised almost perfectly by every classifier and Qalqalah Wusta remains
-strong and architecturally stable, whereas Qalqalah Mushaddadah is intermediate
-and Idgham bila-Ghunnah is the most difficult class; its errors are distributed
-across several competitors rather than concentrated in one, indicating overlap
-with multiple categories under the current representation. SVM's relatively high
-recall for Idgham bila-Ghunnah explains its leading balanced accuracy despite
-XGBoost's higher Macro-F1. PR analysis shows precision for Idgham bila-Ghunnah
-falling steeply as recall increases, so its ROC-AUC must not be read as uniform
-strength.
+Per-class results differ sharply (Fig.~\ref{fig:perclass}). Idgham bi-Ghunnah
+is recognised almost perfectly by every classifier (recall $\approx$1.00,
+ROC-AUC 1.00), and Qalqalah Wusta remains strong and architecturally stable
+across all five models (recall 0.88--0.92, ROC-AUC 0.99). Qalqalah Mushaddadah
+is intermediate (recall 0.58--0.72, ROC-AUC 0.89) and Qalqalah Sughra is
+recovered reliably by the strongest model (recall 0.55, ROC-AUC 0.84). Idgham
+bila-Ghunnah is the most difficult class, with recall spanning 0.017--0.49
+across models and ROC-AUC 0.87 for XGBoost; its errors are distributed across
+several competitors rather than concentrated in one, indicating overlap with
+multiple categories under the current representation. SVM's relatively high
+recall for Idgham bila-Ghunnah (0.49) explains its leading balanced accuracy
+despite XGBoost's higher Macro-F1. PR analysis shows precision for Idgham
+bila-Ghunnah falling steeply as recall increases, so its ROC-AUC must not be
+read as uniform strength: the class is ranked above chance, yet only part of it
+can be recovered without admitting many false positives.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Per-class diagnostics. Recall ranges are taken across the five
-classifiers; ROC-AUC values are those of XGBoost.}
-\label{tab:perclass}
-\begin{tabular}{lcc}
-\hline
-Class & Recall range (5 classifiers) & ROC-AUC (XGBoost) \\
-\hline
-Idgham bi-Ghunnah    & $\approx$1.00        & 1.00 \\
-Qalqalah Wusta       & 0.88--0.92           & 0.99 \\
-Qalqalah Mushaddadah & 0.58--0.72           & 0.89 \\
-Idgham bila-Ghunnah  & 0.017--0.49          & 0.87 \\
-Qalqalah Sughra      & 0.55 (XGBoost)       & 0.84 \\
-\hline
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{fig3_perclass.pdf}
+\caption{Per-class discriminability of the five Tajweed categories, with the
+Idgham subtypes followed by the Qalqalah subtypes. Left: recall attained by the
+five classifiers, shown as the range across models with the XGBoost value
+marked; Qalqalah Sughra carries a single reported value. Right: ROC-AUC of
+XGBoost for the same classes.}
+\label{fig:perclass}
+\end{figure}
 
 \subsection{Feature Importance and Ablation}
 
 In XGBoost, duration dominates feature importance ($\approx$0.52) followed by
 the depth metric ($\approx$0.21); in random forest the same two descriptors lead
 (depth $\approx$0.33, duration $\approx$0.24) over a broader distribution.
-Ablation confirms their causal contribution (Table~\ref{tab:ablation}): removing
+Ablation confirms their causal contribution (Fig.~\ref{fig:ablation}): removing
 the depth metric reduces Macro-F1 from 0.6935 to 0.5169 ($-0.1766$) and removing
-duration to 0.5587 ($-0.1348$), while depth$+$duration alone retains 0.6424
-against 0.2290 for nasality alone. The full set remains superior, so the
-remaining descriptors contribute complementary information.
+duration to 0.5587 ($-0.1348$), whereas retaining duration and depth alone still
+yields 0.6424 and nasality alone collapses to 0.2290, i.e.\ no better than
+random over five classes. Removing the spectral descriptors (centroid and flux)
+costs only 0.0423 Macro-F1, and removing the strongly correlated nasality pair
+0.0391, so both groups carry information that complements---but does not
+duplicate---the temporal descriptors. The full set remains superior to every
+subset and every removal variant: the descriptors are not interchangeable, a
+small subset carries most of the discriminative signal, and the residual classes
+contribute the difference between a good and the best result.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Feature ablation with XGBoost on the held-out test set.}
-\label{tab:ablation}
-\begin{tabular}{lrrr}
-\hline
-Configuration & Accuracy & Balanced acc. & Macro-F1 \\
-\hline
-All features          & 0.7202 & 0.6953 & 0.6935 \\
-Remove nasality       & 0.6964 & 0.6580 & 0.6544 \\
-Remove duration       & 0.5798 & 0.5572 & 0.5587 \\
-Remove depth metric   & 0.5571 & 0.5222 & 0.5169 \\
-Remove spectral       & 0.6905 & 0.6519 & 0.6512 \\
-Nasality only         & 0.2393 & 0.2415 & 0.2290 \\
-Depth $+$ duration only & 0.6571 & 0.6713 & 0.6424 \\
-\hline
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{fig4_ablation.pdf}
+\caption{Feature ablation with XGBoost on the held-out test set. Macro-F1,
+balanced accuracy and accuracy for seven configurations: the full descriptor
+set, four removal variants and two restricted subsets. Protocol, seed and class
+weighting are identical throughout.}
+\label{fig:ablation}
+\end{figure}
 
 \subsubsection{Class-balancing results.}
 Balancing trades overall accuracy for minority-class sensitivity
-(Table~\ref{tab:balancing}). Unbalanced training yields the highest accuracy
+(Fig.~\ref{fig:balancing}). Unbalanced training yields the highest accuracy
 (0.7357) but an Idgham bila-Ghunnah recall of only 0.0678 (F1 0.1111). Class
 weighting raises that recall to 0.3390 and Macro-F1 to 0.6935 at a cost of 1.55
 points of accuracy, and SMOTE gives the strongest balanced performance: balanced
@@ -638,23 +713,15 @@ Idgham bila-Ghunnah recall 0.0678 $\rightarrow$ 0.4915 ($+42.4$ points). Borderl
 weighting after SMOTE yields no further change, indicating that boundary-focused
 synthesis does not suit this feature space.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{Effect of class-balancing strategies (XGBoost). ``B.-Gh.'' denotes the
-Idgham bila-Ghunnah class.}
-\label{tab:balancing}
-\begin{tabular}{lrrrrr}
-\hline
-Configuration & Accuracy & Balanced acc. & Macro-F1 & B.-Gh. recall & B.-Gh. F1 \\
-\hline
-Original          & 0.7357 & 0.6617 & 0.6592 & 0.0678 & 0.1111 \\
-Class weighting   & 0.7202 & 0.6953 & 0.6935 & 0.3390 & 0.3478 \\
-SMOTE             & 0.7119 & 0.7121 & 0.6951 & 0.4915 & 0.3742 \\
-Borderline-SMOTE  & 0.7071 & 0.6899 & 0.6812 & 0.3559 & 0.3307 \\
-SMOTE $+$ weighting & 0.7119 & 0.7121 & 0.6951 & 0.4915 & 0.3742 \\
-\hline
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{fig5_balancing.pdf}
+\caption{Effect of class-balancing strategies with XGBoost. Accuracy, balanced
+accuracy, Macro-F1 and the recall and F1 of the rarest class, Idgham
+bila-Ghunnah, for the original training set, class weighting, SMOTE,
+borderline-SMOTE and SMOTE combined with class weighting.}
+\label{fig:balancing}
+\end{figure}
 
 \subsection{Cross-Riwayah Generalisation and Uncertainty}
 
@@ -672,7 +739,7 @@ made\todo{insert McNemar and Wilcoxon statistics and p-values}.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.40\textwidth]{fig3_cross_riwayah.pdf}
+\includegraphics[width=0.40\textwidth]{fig6_cross_riwayah.pdf}
 \caption{Cross-riwayah generalisation (Macro-F1): rows are training riwayat and
 columns testing riwayat. Diagonal cells (within-riwayah evaluation) correspond
 to the pooled results of Table~\ref{tab:models} and are not repeated here.}
@@ -782,6 +849,17 @@ configuration, so without speaker-independent and external-corpus validation
 high in-domain performance does not establish robustness to unseen speakers or
 conditions; and without McNemar and Wilcoxon statistics, superiority claims
 remain provisional.
+
+\textbf{Future directions.} Three follow-ups address these limits directly.
+First, evaluating the identical protocol on the Hafs-only subset of an
+independent public recitation corpus would separate corpus-specific from
+representation-specific behaviour. Second, a riwayat-conditioned model---with
+the reciter's riwayat supplied as an explicit input or with per-riwayat
+fine-tuning---should reduce the cross-riwayah penalty without enlarging the
+balanced subset. Third, phoneme-aligned rather than fixed-window segmentation
+would remove the boundary noise that currently caps the recall of Qalqalah
+Mushaddadah and would make the duration descriptor directly interpretable in
+terms of Tajweed timing.
 
 
 % =====================================================================

@@ -98,16 +98,11 @@ def math_image(tex, fontsize=BODY):
     return png, w, h, depth
 
 
-SY = lambda n: f'<font face="Symbol">&#x{n:02X};</font>'
 TEXTMATH = {
     r"^\dagger": "<super>&#8224;</super>",
     r"\dagger": "&#8224;",
-    r"\rightarrow": SY(0xAE),
-    r"\approx": SY(0xBB),
     r"+": "+",
     r"k": "<i>k</i>",
-    r"\mu_j": SY(0x6D) + "<sub>j</sub>",
-    r"\sigma_j": SY(0x73) + "<sub>j</sub>",
     r"[0.6604, 0.7240]": "[0.6604, 0.7240]",
     r"+0.1348": "+0.1348",
     r"+0.1336": "+0.1336",
@@ -560,7 +555,7 @@ def main():
     doc.build(flow)
     n = pymupdf.open(out).page_count
     open(os.path.join(ROOT, "build", "pagecount.txt"), "w").write(f"{n}\n")
-    print(f"pages: {n} (limit 17)")
+    print(f"pages: {n} (limit 20)")
 
 
 if __name__ == "__main__":

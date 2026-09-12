@@ -49,12 +49,12 @@ When you send the real `.bib`:
 
 ## Optional strengthening (not blocking)
 
-* A comparison-with-prior-systems table was deliberately **not** fabricated:
-  reported accuracies in the literature differ in class definitions, splits,
-  speaker independence and metrics, so a naive table would be misleading.
-  Once the bibliography is final, a qualitative positioning paragraph or a
-  carefully caveated table can be added in Sect. 9 if space allows (≈0.4 page
-  of headroom exists at the current 16-page count).
-* Figures `fig2`/`fig3` encode exactly the numbers in Sect. 9; if reviewers ask
-  for confusion-matrix or ROC/PR figures, there is room for one more half-page
-  figure.
+* A numeric accuracy-comparison-with-prior-systems table was deliberately
+  **not** fabricated: reported accuracies in the literature differ in class
+  definitions, splits, speaker independence and metrics, so a naive table would
+  be misleading. Instead, Sect. 2.2 now carries a carefully caveated qualitative
+  table (Tab. 2: rules, representation, model, data and outcome of eight prior
+  systems), which satisfies the positioning need without inventing numbers.
+* Figures encode exactly the numbers reported in Sect. 9; at the current
+  19-of-20-page count there is room for one more half-page figure (e.g. a
+  confusion matrix or full ROC/PR curves) should reviewers request one.

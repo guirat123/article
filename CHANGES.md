@@ -94,9 +94,9 @@ without deleting any result, dataset statistic or methodological claim.
 
 * `llncs.cls` v2.24 + `splncs04.bst` bundled in the repository root.
 * Two numbered heading levels only; third level as run-in bold heads
-  (Sects. 6.3, 8.2, 9.5); abstract 158 words (limit 15–250); `\keywords` present.
+  (Sects. 6.2, 8.1, 9.4); abstract 195 words (limit 15–250); `\keywords` present.
 * Table captions above tables, figure captions below figures; equations
-  numbered (1)–(2); square-bracket consecutive numbering for citations.
+  numbered (1)–(4); square-bracket consecutive numbering for citations.
 * Author block / ORCIDs / affiliations left as LNCS-style placeholders with a
   `\todo` (see OPEN_ITEMS.md).
 
@@ -111,13 +111,41 @@ deliberately narrowed by 0.2 cm so the estimate is **conservative**.
 
 | Quantity | Value |
 |---|---|
-| Proxy page count (`build/pagecount.txt`) | **16** |
-| Conference limit | 17 (including references, tables, figures) |
-| Headroom | ≈1 page (also absorbs the text that the 11 `\todo` insertions will add) |
-| Page budget breakdown (proxy) | front matter ≈0.7 · headings ≈2.0 · body ≈9.6 · tables ≈1.5 · figures ≈1.0 · equations ≈0.3 · references ≈0.9 |
+| Proxy page count (`build/pagecount.txt`) | **19** |
+| Conference limit | 20 (including references, tables, figures), raised from 17 at the authors' request |
+| Headroom | ≈1 page (also absorbs the text that the 11 `\todo` insertions and the real `.bib` may add) |
+| Page budget breakdown (proxy) | front matter ≈0.7 · headings ≈2.2 · body ≈10.3 · tables ≈2.1 · figures ≈2.3 · equations ≈0.5 · references ≈0.9 |
 
 Re-run `python3 tools/render_preview.py` after any edit; it rewrites
 `article.pdf` and `build/pagecount.txt`. The authoritative
 count is obtained by compiling `paper.tex` with pdfLaTeX + BibTeX, which the
 authors should do once (the source is pdfLaTeX-clean: no Arabic script, no
 external packages beyond `amsmath`, `graphicx`, `xcolor`, `url`, `microtype`).
+
+## 6. Expansion to the raised 20-page limit
+
+The authors raised the ceiling from 17 to 20 pages and asked for more detail and
+figures. The additional space was spent on scientific content, not padding:
+
+* **Related work** (Sect. 2): prose condensed and two comparison tables added —
+  Tab. 1 (ten Qur'anic speech resources: size, speakers, supervision, rule-level
+  labels) and Tab. 2 (eight prior Tajweed systems: rules, representation, model,
+  data, outcome) — so the gap analysis is evidence-based rather than narrative.
+* **Data analysis** (Sect. 6.1): Tab. 5 defines each of the eight acoustic
+  descriptors together with the acoustic dimension and the Tajweed realisation
+  it targets.
+* **Machine-learning framework** (Sect. 7.2): the random-forest and
+  $k$-nearest-neighbour decision rules are now stated formally as Eqs. (2)–(3),
+  alongside the existing SVM, XGBoost and MLP formalisms.
+* **Experiments** (Sect. 8.1): Tab. 6 maps each of the seven experiment families
+  to its research question, protocol and primary metrics.
+* **Results** (Sect. 9): the three result tables that repeated numbers already
+  discussed in the prose (per-class diagnostics, ablation, class balancing) were
+  converted into Figs. 3–5, which show the same values as grouped bars and
+  recall ranges and free the prose to interpret them; captions state exactly
+  what is plotted and under which protocol.
+* **Limitations** (Sect. 11): a run-in *Future directions* paragraph turns the
+  three most consequential limitations into concrete follow-up studies.
+
+Net effect: 7 tables, 6 figures and 4 numbered equations at **19 pages**, one
+page below the raised limit.

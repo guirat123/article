@@ -14,8 +14,11 @@ work stream.
 | `llncs.cls`, `splncs04.bst` | Springer LNCS class v2.24 and bibliography style |
 | `figures/fig1_framework.pdf` | pipeline schematic (vector) |
 | `figures/fig2_features_vs_mfcc.pdf` | proposed descriptors vs MFCC baseline (vector) |
-| `figures/fig3_cross_riwayah.pdf` | cross-riwayah Macro-F1 matrix (vector) |
-| `tools/make_figures.py` | regenerates the three figures from the reported numbers |
+| `figures/fig3_perclass.pdf` | per-class recall ranges and ROC-AUC (vector) |
+| `figures/fig4_ablation.pdf` | descriptor ablation, seven configurations (vector) |
+| `figures/fig5_balancing.pdf` | class-balancing comparison (vector) |
+| `figures/fig6_cross_riwayah.pdf` | cross-riwayah Macro-F1 matrix (vector) |
+| `tools/make_figures.py` | regenerates the six figures from the reported numbers |
 | `tools/render_preview.py` | LNCS-geometry page-count proof renderer (no TeX needed) |
 | `article.pdf` | paginated proof used for the page estimate |
 | `build/pagecount.txt` | current proxy page count |
@@ -30,8 +33,8 @@ pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 
 Only `amsmath`, `amssymb`, `graphicx`, `xcolor`, `url` and `microtype` are
 required; the file contains no Arabic script and no Unicode beyond UTF-8
-punctuation, so plain pdfLaTeX suffices. Page limit: **17 pages including
-references, tables and figures**; the current content is estimated at **16**.
+punctuation, so plain pdfLaTeX suffices. Page limit: **20 pages including
+references, tables and figures**; the current content is estimated at **19**.
 
 ## Page-count proof without a TeX installation
 
