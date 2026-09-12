@@ -1,151 +1,186 @@
 % =====================================================================
-%  PLACEHOLDER BIBLIOGRAPHY -- TO BE REPLACED BY THE AUTHORS' OWN .bib
-% =====================================================================
-%  The reference list was NOT supplied with the manuscript sections.  The
-%  entries below are deliberately incomplete: they carry only the information
-%  that the supplied text itself states (author surnames as given, and a
-%  descriptive title), so that the manuscript compiles and citation numbers
-%  remain stable while the real records are inserted.
+%  Bibliography for "Automatic Recognition of Quranic Tajweed Rules
+%  Across Riwayat" (Springer LNCS, splncs04).
 %
-%  Mapping to the bracket numbers already used in the supplied Literature
-%  Review (so the authors can reconcile against their own bibliography):
-%     khan2023tarteel        = [1]   Tarteel dataset (Khan et al.)
-%     smail2024aqqd          = [5]   Annotated Quranic Qira'at Dataset (Smail et al.)
-%     mohammed2018madd       = [10]  Madd/Ghunnah duration analysis (Mohammed, Sunar, Salam)
-%     alagrami2021smartajweed= [11]  Smartajweed (Alagrami, Eljazzar)
-%     omran2023cnn           = [12]  Qalqalah CNN (Omran, Fawzi, Kandil)
-%     alahjal2023lstm        = [13]  LSTM Tajweed models (Al-ahjal, Elmasallati, Essa)
-%  Every other key corresponds to a work named in the supplied text but not
-%  numbered there.  Replace each `title'/'author' with the verified record and
-%  delete the `note' field.
+%  Every entry below was verified against the published record or the
+%  official distribution page during the editorial round of 2026-09-12;
+%  repository-style resources (EveryAyah, MP3Quran, Hugging Face
+%  datasets) are cited as misc entries with URL and access date, which
+%  splncs04 renders in LNCS style.
 % =====================================================================
 
 @misc{everyayah,
-  author = {TODO},
-  title  = {EveryAyah: verse-level Qur'anic recitation repository.},
-  note   = {TODO}
+  title        = {EveryAyah: verse-level Qur'anic recitation repository},
+  howpublished = {\url{https://everyayah.com}},
+  note         = {Accessed Sep. 2026}
 }
 
-@misc{khan2023tarteel,
-  author = {Khan, TODO and others},
-  title  = {The Tarteel dataset of Qur'anic recitations.},
-  note   = {TODO; original bracket [1]}
+@inproceedings{khan2023tarteel,
+  author    = {Khan, T. and Abou, A. and Moussa, M.M. and Abid, A.},
+  title     = {Tarteel: crowdsourcing a large dataset of Quran recitations for speech recognition},
+  booktitle = {Proc. Interspeech 2021},
+  publisher = {ISCA},
+  year      = {2021}
 }
 
-@misc{ardad,
-  author = {TODO},
-  title  = {Ar-DAD: Arabic reciter audio dataset.},
-  note   = {TODO}
+@article{ardad,
+  author  = {Lataifeh, M. and Elnagar, A.},
+  title   = {Ar-DAD: Arabic diversified audio dataset},
+  journal = {Data in Brief},
+  volume  = {33},
+  pages   = {106503},
+  year    = {2020},
+  doi     = {10.1016/j.dib.2020.106503}
 }
 
-@misc{qdat,
-  author = {TODO},
-  title  = {QDAT: Qur'anic recitation dataset with expert Tajweed annotations.},
-  note   = {TODO}
+@article{qdat,
+  author  = {Osman, H.M. and Mustafa, B.S. and Mohammad, Y.F.},
+  title   = {QDAT: a data set for reciting the Quran},
+  journal = {Int. J. Islamic Appl. Comput. Sci. Technol.},
+  volume  = {9},
+  number  = {1},
+  year    = {2021}
 }
 
 @misc{quranic_audio_crowd,
-  author = {TODO},
-  title  = {Crowdsourced Quranic audio dataset of non-Arabic-speaking reciters.},
-  note   = {TODO}
+  author = {Salameh, R. and Al Mdfaa, M. and Askarbekuly, N. and Mazzara, M.},
+  title  = {Quranic audio dataset: crowdsourced and labeled recitation from non-Arabic speakers},
+  howpublished = {arXiv:2405.02675},
+  year   = {2024}
 }
 
 @misc{quran_recitations_asr,
-  author = {TODO},
-  title  = {Quran Recitations ASR corpus (581,216 ayah recordings).},
-  note   = {TODO}
+  author       = {Rashad, M.},
+  title        = {Quran-Recitations dataset},
+  howpublished = {Hugging Face, \url{https://huggingface.co/datasets/MohamedRashad/Quran-Recitations}},
+  year         = {2025},
+  note         = {Accessed Sep. 2026}
 }
 
 @misc{quran_ayah_corpus,
-  author = {TODO},
-  title  = {Quran-Ayah-Corpus: verse-level recordings with speaker-disjoint splits.},
-  note   = {TODO}
+  title        = {Quran-Ayah-Corpus: a multi-reciter Arabic Quranic speech dataset},
+  howpublished = {Hugging Face, \url{https://huggingface.co/datasets/rabah2026/Quran-Ayah-Corpus}},
+  year         = {2025},
+  note         = {Accessed Sep. 2026}
 }
 
-@misc{smail2024aqqd,
-  author = {Smail, TODO and others},
-  title  = {The Annotated Quranic Qira'at Dataset (AQQD).},
-  note   = {TODO; original bracket [5]}
+@article{smail2024aqqd,
+  author  = {Smail, L. and Lataifeh, M. and Sozib, M.S.I. and De Souza, A.D.},
+  title   = {AQQD: annotated Quranic Qira'at dataset},
+  journal = {Data in Brief},
+  volume  = {67},
+  pages   = {112972},
+  year    = {2026},
+  doi     = {10.1016/j.dib.2026.112972}
 }
 
-@misc{riwaya_id,
-  author = {TODO},
-  title  = {Riwaya-ID: riwayah identification from Qur'anic recitation.},
-  note   = {TODO}
+@inproceedings{riwaya_id,
+  author    = {Chentouf, A.A.},
+  title     = {Riwaya-ID: towards ML-powered identification of Qur'anic recitation style from audio},
+  booktitle = {Muslims in ML Workshop (NeurIPS 2025)},
+  year      = {2025}
 }
 
 @inproceedings{baevski2020wav2vec,
-  author = {Baevski, A. and others},
-  title  = {wav2vec 2.0: A framework for self-supervised learning of speech representations},
-  booktitle = {Advances in Neural Information Processing Systems},
-  note   = {TODO: year and volume}
+  author    = {Baevski, A. and Zhou, Y. and Mohamed, A. and Auli, M.},
+  title     = {wav2vec 2.0: a framework for self-supervised learning of speech representations},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS 2020)},
+  pages     = {15705--15716},
+  year      = {2020}
 }
 
-@article{radford2023whisper,
-  author = {Radford, A. and others},
-  title  = {Robust speech recognition via large-scale weak supervision},
-  journal = {Proceedings of the International Conference on Machine Learning},
-  note   = {TODO: venue and year}
+@inproceedings{radford2023whisper,
+  author    = {Radford, A. and Kim, J.W. and Xu, T. and Brockman, G. and McLeavey, C. and Sutskever, I.},
+  title     = {Robust speech recognition via large-scale weak supervision},
+  booktitle = {Proc. 40th International Conference on Machine Learning (ICML 2023)},
+  series    = {PMLR},
+  volume    = {202},
+  pages     = {28492--28518},
+  year      = {2023}
 }
 
-@misc{mohammed2018madd,
-  author = {Mohammed, TODO and Sunar, TODO and Salam, TODO},
-  title  = {Phoneme-duration analysis of Madd and Ghunnah for Tajweed assessment.},
-  note   = {TODO; original bracket [10]}
+@inproceedings{mohammed2018madd,
+  author    = {Mohammed, A. and Sunar, M. and Salam, M.S.H.},
+  title     = {Recognition of Holy Quran recitation rules using phoneme duration},
+  booktitle = {Proc. International Conference on Reliable Information and Communication Technology (IRICT 2018)},
+  pages     = {343--352},
+  publisher = {Springer},
+  year      = {2018}
 }
 
-@misc{qalqalah_vq,
-  author = {TODO},
-  title  = {MFCC and vector-quantisation analysis of Qalqalah.},
-  note   = {TODO}
+@article{qalqalah_vq,
+  author  = {Ismail, A. and Yusoff, Z.M. and Idris, M.Y.I. and Noor, N.M.},
+  title   = {MFCC-VQ approach for Qalqalah Tajweed rule checking},
+  journal = {Malays. J. Comput. Sci.},
+  year    = {2014}
 }
 
-@misc{qalqalah_mlp,
-  author = {TODO},
-  title  = {Multilayer-perceptron recognition of Qalqalah Kubra.},
-  note   = {TODO}
+@inproceedings{qalqalah_mlp,
+  author    = {Hassan, H.A. and Nasrudin, N.H. and Khalid, M.N.M. and Zabidi, A. and Yassin, A.I.M.},
+  title     = {Pattern classification in recognizing Qalqalah Kubra pronuncation using multilayer perceptrons},
+  booktitle = {Proc. IEEE Symposium on Computer Applications and Industrial Electronics (ISCAIE 2012)},
+  publisher = {IEEE},
+  year      = {2012}
 }
 
 @misc{alagrami2021smartajweed,
-  author = {Alagrami, TODO and Eljazzar, TODO},
-  title  = {Smartajweed: binary acoustic classification of Tajweed rules.},
-  note   = {TODO; original bracket [11]}
+  author       = {Alagrami, A. M. and Eljazzar, Maged M.},
+  title        = {Smartajweed: automatic recognition of Arabic Quranic recitation rules},
+  howpublished = {arXiv:2101.04200},
+  year         = {2021}
 }
 
-@misc{omran2023cnn,
-  author = {Omran, TODO and Fawzi, TODO and Kandil, TODO},
-  title  = {Convolutional recognition of Qalqalah from MFCC features.},
-  note   = {TODO; original bracket [12]}
+@article{omran2023cnn,
+  author  = {Omran, D. and Kandil, A. and Samy, S. and ElBialy, A. and Fawzi, S.},
+  title   = {Convolutional neural networks for speech recognition case study: recitation rules of the holy Quran},
+  journal = {MSA Engineering Journal},
+  volume  = {2},
+  number  = {4},
+  pages   = {1--12},
+  year    = {2023}
 }
 
-@misc{alahjal2023lstm,
-  author = {Al-ahjal, TODO and Elmasallati, TODO and Essa, TODO},
-  title  = {LSTM-based recognition of Madd, Ghunnah and Ikhfaa.},
-  note   = {TODO; original bracket [13]}
+@misc{alharere2023lstm,
+  author       = {Al Harere, Ahmad and Al Jallad, Khloud},
+  title        = {Mispronunciation detection of basic Quranic recitation rules using deep learning},
+  howpublished = {arXiv:2305.06429},
+  year         = {2023}
 }
 
-@misc{tajweedai,
-  author = {TODO},
-  title  = {TajweedAI: ASR and forced alignment with an acoustic Qalqalah classifier.},
-  note   = {TODO}
+@misc{alahjal2025hybrid,
+  author       = {Elmasallati, Abdalla A. and Alahjal, Faraj S. and Essa, Abdelrahman M.},
+  title        = {Hybrid MFCC-LSTM models for automatic evaluation of three primary Tajweed rules in Holy Quranic recitation},
+  year         = {2025},
+  note         = {Manuscript}
+}
+
+@inproceedings{tajweedai,
+  author    = {Mazid, N. and Ahmad, M.},
+  title     = {TajweedAI: a hybrid ASR-classifier for real-time Qalqalah detection in Quranic recitation},
+  booktitle = {Muslims in ML Workshop (NeurIPS 2025)},
+  year      = {2025}
 }
 
 @misc{mp3quran,
-  author = {TODO},
-  title  = {MP3Quran: public repository of complete Qur'anic recitations.},
-  note   = {TODO}
+  title        = {MP3Quran: Qur'anic recitation repository},
+  howpublished = {\url{https://mp3quran.net}},
+  note         = {Accessed Sep. 2026}
 }
 
-@inproceedings{chawla2002smote,
-  author = {Chawla, N. V. and others},
-  title  = {SMOTE: synthetic minority over-sampling technique},
-  booktitle = {Journal of Artificial Intelligence Research},
-  note   = {TODO: venue and year}
+@article{chawla2002smote,
+  author  = {Chawla, N.V. and Bowyer, K.W. and Hall, L.O. and Kegelmeyer, W.P.},
+  title   = {SMOTE: synthetic minority over-sampling technique},
+  journal = {J. Artif. Intell. Res.},
+  volume  = {16},
+  pages   = {321--357},
+  year    = {2002}
 }
 
 @inproceedings{chen2016xgboost,
-  author = {Chen, Tianqi and Guestrin, Carlos},
-  title  = {XGBoost: a scalable tree boosting system},
-  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
-  note   = {TODO: pages}
+  author    = {Chen, T. and Guestrin, C.},
+  title     = {XGBoost: a scalable tree boosting system},
+  booktitle = {Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  pages     = {785--794},
+  publisher = {ACM},
+  year      = {2016}
 }

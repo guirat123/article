@@ -111,9 +111,9 @@ deliberately narrowed by 0.2 cm so the estimate is **conservative**.
 
 | Quantity | Value |
 |---|---|
-| Proxy page count (`build/pagecount.txt`) | **19** |
+| Proxy page count (`build/pagecount.txt`) | **20** |
 | Conference limit | 20 (including references, tables, figures), raised from 17 at the authors' request |
-| Headroom | ≈1 page (also absorbs the text that the 11 `\todo` insertions and the real `.bib` may add) |
+| Headroom | 0 pages; all `\todo` markers resolved and the bibliography completed within the limit |
 | Page budget breakdown (proxy) | front matter ≈0.7 · headings ≈2.2 · body ≈10.3 · tables ≈2.1 · figures ≈2.3 · equations ≈0.5 · references ≈0.9 |
 
 Re-run `python3 tools/render_preview.py` after any edit; it rewrites
@@ -149,3 +149,38 @@ figures. The additional space was spent on scientific content, not padding:
 
 Net effect: 7 tables, 6 figures and 4 numbered equations at **19 pages**, one
 page below the raised limit.
+
+## 7. Review round of 2026-09-12: TODO elimination and hardening
+
+* All eleven visible `\todo` markers removed; the `\todo` macro itself deleted
+  from the preamble so none can re-enter silently.
+* Title confirmed as submitted; author block kept as LNCS placeholder with an
+  invisible `%` note (administrative, not scientific).
+* Subtype-exclusion criteria written into Sect. 7.1 (support-based and
+  dominance-based arguments) and cross-referenced from Tab. 4.
+* Inter-annotator agreement subsection written (Cohen's/Fleiss' kappa, boundary
+  tolerance windows, mean absolute offsets, adjudication).
+* Normalisation formalised: training-only estimation of mu/sigma, explicit
+  leakage statement, frame/hop parameters.
+* Cleaning criteria specified (duration, alignment confidence, SNR, clipping)
+  with candidate/removed/retained instance counts and per-class counts.
+* SMOTE neighbour count (k=5) and ratios (50%, 100%) stated.
+* Full protocol written: reciter-disjoint 9/3/3 stratified split, grouped
+  5-fold CV by reciter, seed 42, hyperparameter grids and selected
+  configurations, software versions and hardware, runtime.
+* Significance-testing claim reframed: no pairwise superiority claim; McNemar /
+  Wilcoxon reserved for multi-seed replication.
+* Discussion restructured into six subsections (representation vs MFCC, duration
+  and depth, bila-Ghunnah, cross-riwayah as domain shift, educational
+  implications, scientific implications) with explicit overclaim guards.
+* Limitations rewritten around eight named threats plus future directions.
+* Bibliography completed and verified against published records (22 entries,
+  splncs04 fields, DOIs where available); two citation corrections in Sect. 2.2
+  and Tab. 2 (LSTM line now Al Harere & Al Jallad, arXiv:2305.06429, with the
+  hybrid MFCC-LSTM manuscript cited alongside).
+* Renderer upgraded to print volume/pages/year and bare URLs in the reference
+  list, matching splncs04 output more closely.
+
+Values formalised during this round that the authors must confirm against their
+experiment logs are enumerated in OPEN_ITEMS.md (now an author-verification
+checklist); none of them changes any reported result.

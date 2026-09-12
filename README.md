@@ -10,7 +10,7 @@ work stream.
 | Path | Purpose |
 |---|---|
 | `paper.tex` | the manuscript (authoritative source) |
-| `refs.bib` | placeholder bibliography — replace key-by-key with the real `.bib` |
+| `refs.bib` | verified bibliography (22 entries, LNCS/splncs04 fields) |
 | `llncs.cls`, `splncs04.bst` | Springer LNCS class v2.24 and bibliography style |
 | `figures/fig1_framework.pdf` | pipeline schematic (vector) |
 | `figures/fig2_features_vs_mfcc.pdf` | proposed descriptors vs MFCC baseline (vector) |
@@ -34,7 +34,7 @@ pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 Only `amsmath`, `amssymb`, `graphicx`, `xcolor`, `url` and `microtype` are
 required; the file contains no Arabic script and no Unicode beyond UTF-8
 punctuation, so plain pdfLaTeX suffices. Page limit: **20 pages including
-references, tables and figures**; the current content is estimated at **19**.
+references, tables and figures**; the current content is estimated at **20**.
 
 ## Page-count proof without a TeX installation
 

@@ -276,19 +276,40 @@ def bib_field(chunk, field):
 
 
 def bib_text(chunk):
+    """Approximate splncs04 ordering: authors, title, venue, volume/pages,
+    year, notes."""
     authors = re.sub(r"\s+and\s+", ", ", bib_field(chunk, "author"))
     title = bib_field(chunk, "title")
     book = bib_field(chunk, "booktitle")
     jour = bib_field(chunk, "journal")
+    vol = bib_field(chunk, "volume")
+    num = bib_field(chunk, "number")
+    pages = bib_field(chunk, "pages")
+    year = bib_field(chunk, "year")
+    how = bib_field(chunk, "howpublished").replace("\\url{", "")
     note = bib_field(chunk, "note")
     parts = []
     if authors:
         parts.append(authors + ":")
     parts.append(title + ".")
     if book:
-        parts.append("In: " + book + ".")
+        v = "In: " + book
+        if pages:
+            v += ", pp. " + pages
+        parts.append(v + ".")
     elif jour:
-        parts.append(jour + ".")
+        v = jour
+        if vol:
+            v += " " + vol
+        if num:
+            v += "(" + num + ")"
+        if pages:
+            v += ", " + pages
+        parts.append(v + ".")
+    if how:
+        parts.append(how + ".")
+    if year:
+        parts.append("(" + year + ")")
     if note:
         parts.append("(" + note + ")")
     return " ".join(parts)

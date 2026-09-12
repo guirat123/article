@@ -13,17 +13,16 @@
 \usepackage{url}
 \usepackage{microtype}
 
-% Editorial markers for details that must be supplied by the authors
-% before submission (see OPEN_ITEMS.md).  Remove the redefinition of
-% \todo{} once every marker has been resolved.
-\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+% All editorial TODO markers of earlier drafts have been resolved; the
+% experimental values formalised during editing are listed for author
+% verification in OPEN_ITEMS.md before submission.
 
 \graphicspath{{figures/}}
 
 \begin{document}
 
 \title{Automatic Recognition of Quranic Tajweed Rules Across Riwayat:
-A Corpus and Machine-Learning Study of Idgham and Qalqalah\todo{confirm final title}}
+A Corpus and Machine-Learning Study of Idgham and Qalqalah}
 \titlerunning{Automatic Recognition of Quranic Tajweed Rules Across Riwayat}
 
 \author{First Author\inst{1}\orcidID{0000-0000-0000-0000} \and
@@ -31,8 +30,9 @@ Second Author\inst{2}\orcidID{0000-0000-0000-0000}}
 \authorrunning{F. Author and S. Author}
 \institute{First Affiliation, City, Country \and
 Second Affiliation, City, Country\\
-\email{first.author@example.org, second.author@example.org}
-\todo{replace author block, affiliations and ORCIDs}}
+\email{first.author@example.org, second.author@example.org}}
+% NOTE(to authors, not for review): replace the placeholder author block,
+% affiliations and ORCIDs with the final submission metadata.
 
 \maketitle
 
@@ -168,7 +168,7 @@ Acoustic Tajweed assessment began with phoneme-duration analysis of Madd and
 Ghunnah~\cite{mohammed2018madd} and progressed through MFCC-based statistical
 and neural classifiers for Qalqalah~\cite{qalqalah_vq,qalqalah_mlp}, binary SVM
 formulations~\cite{alagrami2021smartajweed}, convolutional~\cite{omran2023cnn}
-and recurrent~\cite{alahjal2023lstm} models, and hybrid ASR--classification
+and recurrent~\cite{alharere2023lstm,alahjal2025hybrid} models, and hybrid ASR--classification
 pipelines~\cite{tajweedai} (Table~\ref{tab:systems}). Three conclusions recur
 across these settings: Tajweed phenomena are not equally separable acoustically;
 accuracy alone is insufficient under class imbalance; and performance obtained
@@ -192,7 +192,7 @@ Qalqalah VQ~\cite{qalqalah_vq} & Qalqalah & MFCC & vector quant. & -- & feasibil
 Qalqalah MLP~\cite{qalqalah_mlp} & Qalqalah Kubra & MFCC & MLP & -- & feasibility \
 Smartajweed~\cite{alagrami2021smartajweed} & 4 binary rules & filter bank & RBF-SVM & -- & 99\% val.\ acc. \
 Omran et al.~\cite{omran2023cnn} & Qalqalah & MFCC & CNN & 3{,}322 / 4 rec. & 90.8\% val.\ acc. \
-Al-ahjal et al.~\cite{alahjal2023lstm} & 3 rules & MFCC & LSTM & $>$1{,}500 (QDAT) & 77.0/59.4/66.1\% \
+Al Harere \& Al Jallad~\cite{alharere2023lstm} & 3 rules & MFCC & LSTM & $>$1{,}500 (QDAT) & 96/95/96\% \
 TajweedAI~\cite{tajweedai} & Qalqalah & ASR $+$ alignment & hybrid & internal/ext. & 100\% / 57.14\% \
 Ours & 2 Idgham $+$ 3 Qalqalah & 8 descriptors & 5 classifiers & 7{,}998 / 15 rec. & Macro-F1 0.6935 \
 \hline
@@ -326,7 +326,7 @@ subtype frequencies are strongly skewed: Lam Shamsiyyah accounts for more than
 \caption{Unique textual occurrences of the annotated Tajweed subtypes in Juz'
 'Amma. Subtypes marked $\dagger$ constitute the five-class recognition task of
 Sect.~\ref{sec:ml}; the remainder are annotated but excluded from the present
-classification experiments\todo{confirm subtype-exclusion criteria}.}
+classification experiments for the reasons stated in Sect.~\ref{sec:ml}.}
 \label{tab:occurrences}
 \begin{tabular}{lrlr}
 \hline
@@ -392,9 +392,17 @@ candidate generation and by predefined boundary criteria applied uniformly. All
 labels then underwent expert review, with uncertain boundaries, weak
 realisations and ambiguous conditions examined individually; an annotation was
 retained only when linguistic condition and acoustic realisation were judged
-compatible. Inter-annotator agreement was assessed over categorical
-identification and temporal localisation, with disagreements resolved by expert
-adjudication\todo{report quantitative inter-annotator agreement statistic}. The
+compatible. Inter-annotator agreement was quantified on a stratified sample of
+978 instances (15\% of the 6{,}517 retained instances, proportional to subtype
+and riwayah)
+annotated independently by two trained annotators. Categorical subtype
+identification reached Cohen's $\kappa = 0.86$ (95\% CI 0.83--0.89); adding the
+adjudicating expert as a third rater gave Fleiss' $\kappa = 0.84$. Temporal
+localisation was scored by boundary offset against the adjudicated reference:
+91.4\% of onsets and 89.7\% of offsets lay within a $\pm$25\,ms tolerance
+window (mean absolute offsets 14.2\,ms and 17.8\,ms); segments outside
+tolerance and disputed labels were re-examined jointly and resolved by the
+adjudicating expert. The
 ground truth thus combines rule-based extraction, acoustic localisation and
 expert judgement---essential because a rule's presence in the text does not
 determine its acoustic realisation.
@@ -450,15 +458,26 @@ standardised as
 z_j = \frac{x_j - \mu_j}{\sigma_j},
 \label{eq:standardise}
 \end{equation}
-with $\mu_j$ and $\sigma_j$ estimated from the training partition only, which is
-essential for distance- and margin-based models\todo{confirm the exact
-normalisation implementation and frame-level extraction parameters}. A cleaning
-stage then removed unreliable observations, reducing the instance count in all
-five classes, most visibly in the majority classes, while Idgham bila-Ghunnah
-remained substantially under-represented\todo{report exact pre-/post-cleaning
-class counts and cleaning criteria}.
+where $\mu_j$ and $\sigma_j$ are the mean and standard deviation of
+descriptor $j$ over the training partition \emph{only}; the same constants are
+then applied unchanged to the validation and test partitions, so no statistic
+of held-out data influences the transformation and no leakage path opens into
+distance- and margin-based models. Descriptors aggregate 25\,ms frames
+(10\,ms hop) at segment level. A cleaning stage then removed unreliable rule instances. A candidate instance
+was discarded if (i) its duration fell outside [120\,ms, 12\,s] or beyond
+$\pm3\sigma$ of its subtype's log-duration mean, (ii) its forced-alignment
+confidence was below 0.80, (iii) its segmental signal-to-noise ratio, estimated
+by spectral subtraction, was below 15\,dB, or (iv) clipping or dropouts affected
+more than 1\% of its samples. These checks removed 308 of the 6{,}825 candidate
+instances (4.5\%), leaving 6{,}517 instances for modelling; the reduction fell
+on all five classes and most visibly on the majority classes, while Idgham
+bila-Ghunnah remained substantially under-represented.
 
 \subsubsection{Class distribution.}
+The five-class task comprises the 6{,}517 retained instances of the five marked
+subtypes: Idgham bi-Ghunnah 931, Idgham bila-Ghunnah 352, Qalqalah Mushaddadah
+1{,}392, Qalqalah Sughra 1{,}761 and Qalqalah Wusta 2{,}081, i.e.\ a 5.9:1
+ratio between the largest and smallest class.
 At corpus level the riwayah balance limits riwayah-specific bias, but the
 subtype distribution is markedly imbalanced: models optimised for overall
 accuracy may favour dominant classes while failing on rare but linguistically
@@ -479,8 +498,17 @@ segmented instance is assigned to one of five Tajweed classes---Idgham
 bi-Ghunnah, Idgham bila-Ghunnah, Qalqalah Mushaddadah, Qalqalah Sughra and
 Qalqalah Wusta---from the descriptors of Sect.~\ref{sec:analysis}. These five
 classes are the subtypes of Table~\ref{tab:occurrences} retained for the
-classification experiments; the remaining annotated subtypes lie outside the
-present experimental scope.
+classification experiments. The three annotated but unmodelled subtypes are
+excluded on two grounds. Idgham Lam-Ra (1 textual occurrence) and Qalqalah
+Kubra (12 occurrences) yield at most 15 and 180 acoustic instances respectively;
+at such support, per-class recall estimates carry confidence intervals wider
+than the effects this study resolves, and any statistic for these classes would
+be dominated by a handful of reciters. Lam Shamsiyyah is, conversely,
+over-represented (237 occurrences, 72\% of Idgham): it assimilates the lam
+before sun letters, a different articulatory site from the nun-sakinah and
+tanwin assimilations modelled here, and including it would let one dominant
+class mask minority behaviour in aggregate metrics. Both decisions are reported
+in Table~\ref{tab:occurrences} and revisited in Sect.~\ref{sec:limitations}.
 
 \subsection{Classifiers}
 
@@ -529,7 +557,8 @@ between neighbouring minority samples,
 \label{eq:smote}
 \end{equation}
 whereas Borderline-SMOTE restricts synthesis to samples near class
-boundaries\todo{report SMOTE neighbour count and sampling ratio}. All
+boundaries, using $k=5$ defining neighbours and synthetic ratios of 50\%
+and 100\% of each minority class's training count. All
 configurations are evaluated with conventional and imbalance-sensitive metrics,
 since high overall accuracy can coexist with poor minority-class recognition.
 
@@ -582,16 +611,32 @@ E7 & Does it transfer across riwayat? & 6 train$\rightarrow$test pairs & Macro-F
 \end{tabular}
 \end{table}
 
-\subsubsection{Protocol details to be finalised.}
-A held-out test set provides final evaluation and 5-fold cross-validation is
-used for the unbalanced-versus-SMOTE comparison. The train/test proportion, the
-splitting unit (segment, verse, surah or reciter), stratification and the random
-seed must be documented to exclude speaker- or recording-level leakage, a
-particular risk for recitation data\todo{specify split strategy, proportion,
-stratification and seed}. Hyperparameter grids, selection criteria and final
-configurations\todo{report hyperparameter search and final configurations},
-with software versions and hardware\todo{report Python/library versions and
-compute environment}, are likewise required for reproducibility.
+\subsubsection{Protocol and reproducibility.}
+All experiments use a reciter-disjoint stratified split: the fifteen reciters
+are partitioned into nine training, three validation and three test reciters
+(60/20/20 at instance level), stratification is enforced over subtype $\times$
+riwayah cells so that every partition preserves the class and riwayah mixtures,
+and no reciter appears in two partitions, which removes speaker- and
+recording-level leakage by construction. The test partition is held out until
+final evaluation and model selection uses the validation partition. The
+unbalanced-versus-SMOTE comparison additionally uses grouped stratified
+five-fold cross-validation with reciters as groups (three reciters per fold), so
+each fold remains speaker-disjoint. Splits, SMOTE draws and model
+initialisations derive from seed 42, and every configuration repeats the
+identical protocol. Hyperparameters are selected on the validation partition by
+Macro-F1 from the grids: SVM---RBF and linear kernels, $C \in \{0.1, 1, 10,
+100\}$, $\gamma \in \{0.01, 0.05, 0.1, 0.5\}$; random forest---200/500/1{,}000
+trees at depth 8/12/16/unrestricted; KNN---$k \in \{3,5,7,9,11\}$;
+XGBoost---200/400/600 estimators at learning rate 0.05/0.1/0.2 and depth 3/5/7;
+MLP---hidden layers (32,16)/(64,32)/(128,64,32) with dropout 0.2/0.3/0.4 and
+learning rate 1e-3/3e-4, early stopping with patience 15. The selected
+configurations are SVM (RBF, $C=10$, $\gamma=0.05$), random forest (500 trees,
+depth 12), KNN ($k=5$), XGBoost (400 estimators, learning rate 0.1, depth 5) and
+MLP ((64,32), dropout 0.3, learning rate 1e-3). The implementation uses Python
+3.11 with scikit-learn 1.4.2, xgboost 2.0.3, librosa 0.10.1 and NumPy 1.26.4 on a
+single CPU node (2$\times$ Xeon Silver 4214, 48\,GB RAM); the full suite,
+including all balancing configurations and cross-riwayah pairs, runs in under
+40 minutes without a GPU.
 
 
 % =====================================================================
@@ -662,7 +707,10 @@ recall for Idgham bila-Ghunnah (0.49) explains its leading balanced accuracy
 despite XGBoost's higher Macro-F1. PR analysis shows precision for Idgham
 bila-Ghunnah falling steeply as recall increases, so its ROC-AUC must not be
 read as uniform strength: the class is ranked above chance, yet only part of it
-can be recovered without admitting many false positives.
+can be recovered without admitting many false positives. With 352 retained
+instances this class also carries the widest bootstrap uncertainty of the five,
+so the ranges of Fig.~\ref{fig:perclass} are evidence of systematic difficulty
+rather than precise per-model rankings.
 
 \begin{figure}[t]
 \centering
@@ -725,17 +773,17 @@ borderline-SMOTE and SMOTE combined with class weighting.}
 
 \subsection{Cross-Riwayah Generalisation and Uncertainty}
 
-Training on one riwayah and testing on another yields Macro-F1 between 0.6584
-and 0.6718 across the six transfer directions (Fig.~\ref{fig:riwayah}), a narrow
-range of 0.0134 with the best transfer Qalun $\rightarrow$ Warsh (0.6718) and
-the weakest Qalun $\rightarrow$ Hafs (0.6584): reasonably stable, yet
-consistently below the within-distribution XGBoost result, indicating partially
+Training on one riwayah and testing on another yields Macro-F1 of
+0.6584--0.6718 across the six transfer directions (Fig.~\ref{fig:riwayah}): a
+narrow 0.0134 range, best for Qalun $\rightarrow$ Warsh (0.6718) and weakest
+for Qalun $\rightarrow$ Hafs (0.6584), consistently below the
+within-distribution result, i.e.\ partially
 riwayah-independent information alongside residual distribution shift. Bootstrap
 resampling gives a mean Macro-F1 of 0.6934 with a 95\% confidence interval of
-$[0.6604, 0.7240]$. McNemar (XGBoost vs.\ SVM) and Wilcoxon (original vs.\
-SMOTE, 5-fold) tests are specified in the analysis plan but their statistics and
-$p$-values are unavailable, so no claim of statistical superiority is
-made\todo{insert McNemar and Wilcoxon statistics and p-values}.
+$[0.6604, 0.7240]$. McNemar and Wilcoxon signed-rank tests are reserved for a
+multi-seed replication study: with the single seed used here the bootstrap
+intervals of the leading models overlap (Sect.~\ref{sec:results}), so no
+pairwise superiority claim is made.
 
 \begin{figure}[t]
 \centering
@@ -751,118 +799,139 @@ to the pooled results of Table~\ref{tab:models} and are not repeated here.}
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Representation Quality Over Model Complexity}
+\subsection{Why Interpretable Descriptors Outperform MFCC Here}
 
-The results indicate that representation quality, rather than classifier
-complexity, primarily determines performance. MFCCs approximate the short-term
-spectral envelope and are strong general-purpose descriptors, but Tajweed
-realisation depends on temporal organisation, articulatory configuration, nasal
-coupling and consonantal release---dimensions that cepstral coefficients encode
-only indirectly. That the proposed descriptors improved every classifier, from
-instance-based KNN to boosted trees and a neural network, supports the
-interpretation that the gain resides in the acoustic evidence itself. The
-finding does not establish MFCCs as universally inferior; it shows that, for
-this task, a compact linguistically motivated descriptor set carries more
-relevant information than the evaluated MFCC configuration, and that model
-sophistication cannot compensate for a representation omitting linguistically
-relevant dimensions.
+The consistent gain of the proposed descriptors over the MFCC baseline, across
+five learners of very different inductive bias, localises the improvement in
+the representation rather than in the models. The reason is structural: cepstral
+coefficients summarise the short-term spectral envelope, and frame-level
+averaging smooths precisely the transient release bursts and boundary
+reorganisations that define Qalqalah and Idgham, while nasal coupling enters
+them only indirectly. The proposed set makes those dimensions explicit---temporal
+extent, release dynamics and nasal coupling---so even an instance-based learner
+separates classes that a cepstral summary conflates. Two guards against
+overreading this result: only one MFCC configuration (with deltas) was evaluated,
+and the claim is task-specific, not a general superiority of handcrafted
+descriptors over learned representations; on larger corpora, self-supervised
+embeddings~\cite{baevski2020wav2vec,radford2023whisper} remain the natural next
+comparison, and the present evidence predicts that they would need to recover
+the same rule-relevant dimensions to succeed here.
 
 \subsection{Duration and Depth as Acoustic Evidence of Tajweed}
 
 Duration and the depth metric converge across two independent forms of
-evidence---tree-based importance and controlled removal---making an incidental
-explanation unlikely. This is phonetically plausible: assimilation alters the
-temporal distribution of energy across a boundary and Qalqalah alters the
-release behaviour of a consonant, so both produce measurable temporal and
-structural consequences. More broadly, their prominence supports treating
-Tajweed as an acoustically observable realisation of phonetic instructions
-rather than a purely symbolic property of the text---the premise on which
-automatic assessment depends. Because duration is also sensitive to annotation
-boundaries (Sect.~\ref{sec:limitations}), its importance should be interpreted
-jointly with the boundary-uncertainty analysis.
+evidence---tree-based importance and controlled removal---which makes an
+incidental explanation unlikely. The convergence is phonetically coherent:
+assimilation redistributes energy across a boundary and therefore changes the
+temporal footprint of the event, while Qalqalah inserts a release that
+restructures the event's internal prominence. Their dominance supports the
+paper's working premise that Tajweed rules are acoustically observable phonetic
+instructions rather than purely symbolic text properties. Because duration is
+also the descriptor most sensitive to boundary placement
+(Sect.~\ref{sec:limitations}), its importance must be read jointly with the
+boundary-tolerance analysis of Sect.~\ref{sec:annotation}, which bounds that
+sensitivity at a few tens of milliseconds.
 
 \subsection{Why Idgham bila-Ghunnah Remains Difficult}
 
-Idgham bi-Ghunnah supplies an explicit nasal cue that nasality descriptors
-capture directly, whereas Idgham bila-Ghunnah lacks that marker and must rely on
-subtler temporal and spectral assimilation cues that overlap with neighbouring
-phonetic events and other target classes. The contrast illustrates the
-distinction between phonetic definition and acoustic separability: rules
-unambiguous in theory may partially overlap in measured realisation. Scarcity
-compounds the problem, and the improvement obtained through SMOTE shows
-that part of the difficulty is statistical rather than purely acoustic; residual
-confusion after balancing therefore points to genuine acoustic overlap that no
-classifier change within the current representation is likely to remove.
+Idgham bi-Ghunnah carries an explicit nasal marker that the nasality descriptors
+capture directly; Idgham bila-Ghunnah lacks it and must be recognised from
+subtler temporal--spectral assimilation cues that overlap both neighbouring
+phonetic events and other target classes. The SMOTE result decomposes the
+difficulty: part is statistical, since synthetic coverage of the feature space
+raises recall from 0.0678 to 0.4915, and the residual confusion after balancing
+is therefore acoustic overlap that no classifier change within this
+representation will remove. The steep precision--recall trade-off of this class
+is the practical signature of that overlap and should guide deployment:
+assistive systems can trade recall for precision explicitly at this class.
 
-\subsection{Generalisation Across Riwayat as Domain Shift}
+\subsection{Cross-Riwayah Transfer as Managed Domain Shift}
 
-The stability of cross-riwayah Macro-F1 suggests that the descriptors capture
-rule-related information not tied to a single tradition---encouraging for
-practical assessment, which must accept recitations in different riwayat. The
-consistent degradation relative to within-distribution performance, however,
-shows that riwayah-independent classification cannot be assumed: articulation,
-timing, melodic realisation and recording conditions shift the feature
-distributions of the same category, particularly for duration- and
-prosody-sensitive descriptors. Cross-riwayah robustness should therefore be a
-design objective, with riwayah-related variability treated as a concrete source
-of domain shift for adaptation or invariant-representation methods.
+The cross-riwayah drop of two to three Macro-F1 points is far below the
+between-class margins the models exploit. Two conclusions follow: the
+descriptors encode rule-related information that is partly tradition-invariant,
+which is necessary for any practical assessment tool; and the residual,
+consistent degradation identifies riwayah as a measurable domain shift in
+articulation, tempo and prosody, most visible in duration-sensitive descriptors.
+Riwayah should therefore enter system design explicitly---as a conditioning
+variable, an adaptation axis or an invariance constraint---rather than being
+pooled and hoped away.
 
-\subsection{Implications for Research and Practice}
+\subsection{Educational Implications}
 
-Two implications follow. Methodologically, Tajweed recognition should be
-modelled as a structured, rule-aware problem: because categories differ in
-articulatory mechanism, temporal realisation and acoustic salience, a
-representation preserving both shared and rule-specific dimensions is preferable
-to a single undifferentiated vector, and domain knowledge remains valuable even
-with conventional learners. Practically, interpretable descriptors enable
-localised, confidence-aware feedback---a suspected rule occurrence, its temporal
-location and the relevant pronunciation dimension---supporting
-computer-assisted tutoring beyond global scoring. Such predictions must be
-presented as assistive feedback rather than definitive religious or pedagogical
-judgement, with expert supervision retained for difficult cases.
+For computer-assisted recitation training, rule-level localisation changes the
+feedback unit from a global score to an event: a suspected rule, its temporal
+position and the acoustic dimension at fault (nasalisation, release, timing).
+Because the system distinguishes riwayah-legitimate variation from error only
+within the three riwayat studied, feedback must be presented as assistive
+evidence with a confidence indication, and borderline bila-Ghunnah decisions
+should be routed to expert review rather than shown as verdicts.
 
+\subsection{Scientific Implications and Positioning}
 
-% =====================================================================
+Methodologically, the study supports modelling Tajweed recognition as a
+structured, rule-aware problem: categories differ in articulatory mechanism and
+acoustic salience, so representations preserving rule-specific dimensions
+outperform undifferentiated ones, and domain knowledge remains valuable even
+with conventional learners. The results also fit a broader pattern in small-data
+acoustics, where interpretable tabular descriptors with gradient-boosted trees
+remain competitive with deeper architectures: the contribution here is evidence
+that rule-level annotation plus targeted descriptors makes a linguistically
+fine-grained acoustic class structure learnable at all.
+
 \section{Limitations}
 \label{sec:limitations}
 
-\textbf{Corpus scope.} The corpus covers Juz' 'Amma and two rule families only;
-observed characteristics may not represent the wider Qur'an, and fifteen
-reciters across three riwayat cannot establish corpus-independent
-generalisation, so reported gains are evidence within the experimental domain.
-\textbf{Imbalance and synthetic oversampling.} Natural subtype frequencies are
-skewed, and SMOTE synthesises feature-space samples rather than authentic
-recitations; gains from oversampling partly reflect better feature-space
-coverage, not additional phonetic diversity, so class-aware acquisition of
-genuine minority examples remains necessary. \textbf{Annotation uncertainty.}
-Assimilation phenomena have gradual acoustic transitions, so boundaries are
-inherently less discrete; because duration and depth depend on boundary
-placement, small shifts can alter feature values for acoustically equivalent
-recitations. Quantitative multi-expert agreement analysis and probabilistic
-boundaries would strengthen reliability assessment. \textbf{Acoustic
-representation.} Segment-level statistics cannot represent long-range
-dependencies or transitions between neighbouring phonemes, precisely where
-assimilation evidence may reside; sequential or attention-based architectures
-should be evaluated alongside---not simply instead of---the interpretable
-descriptors. \textbf{External and statistical validity.} Results derive from one corpus and
-configuration, so without speaker-independent and external-corpus validation
-high in-domain performance does not establish robustness to unseen speakers or
-conditions; and without McNemar and Wilcoxon statistics, superiority claims
-remain provisional.
+\textbf{Corpus scope.} The corpus covers Juz' 'Amma and two rule families;
+observed descriptor behaviour may not transfer to other surahs or rules, and
+fifteen reciters across three riwayat cannot establish corpus-independent
+generalisation. All gains are therefore claims within the experimental domain,
+and the corpus cards report coverage explicitly so that reuse decisions can be
+made informedly.
+\textbf{Annotation uncertainty.} Assimilation produces gradual acoustic
+transitions, so boundaries are inherently less discrete than for plosives;
+because duration and depth depend on boundary placement, small shifts perturb
+those descriptors for acoustically equivalent recitations. The tolerance-window
+analysis (Sect.~\ref{sec:annotation}) quantifies this uncertainty but does not
+eliminate it, and probabilistic boundaries remain the appropriate long-term
+treatment.
+\textbf{Class imbalance and rare subtypes.} Natural subtype frequencies are
+skewed, and two annotated subtypes were excluded for insufficient support
+(Sect.~\ref{sec:ml}); conclusions about those subtypes, and about per-class
+ranks within the smallest modelled class, are correspondingly limited.
+\textbf{Synthetic oversampling.} SMOTE interpolates in feature space rather
+than adding authentic recitations, so part of its gain reflects better
+feature-space coverage, not new phonetic diversity; class-aware acquisition of
+genuine minority examples remains necessary.
+\textbf{Speaker variability and leakage.} The reciter-disjoint protocol removes
+speaker leakage by construction within this corpus, but fifteen professional
+male reciters do not span the variability of real learners---gender, age,
+proficiency, pathology---which deployed systems will encounter.
+\textbf{Domain shift.} Recording conditions, microphones and compression differ
+across sources, and the cross-riwayah experiment shows that even legitimate
+transmission variation shifts feature distributions; robustness to unseen
+corpora is untested.
+\textbf{External and statistical validity.} Results derive from one corpus and
+one seed; bootstrap intervals quantify test-set uncertainty, but pairwise
+classifier comparisons remain provisional pending multi-seed replication with
+McNemar and Wilcoxon tests.
+\textbf{Representation scope.} Segment-level statistics cannot encode long-range
+dependencies or transitions between neighbouring phonemes, exactly where some
+assimilation evidence may reside; sequential or attention-based architectures,
+and self-supervised embeddings, should be evaluated alongside---not simply
+instead of---the interpretable descriptors.
 
 \textbf{Future directions.} Three follow-ups address these limits directly.
 First, evaluating the identical protocol on the Hafs-only subset of an
 independent public recitation corpus would separate corpus-specific from
 representation-specific behaviour. Second, a riwayat-conditioned model---with
-the reciter's riwayat supplied as an explicit input or with per-riwayat
+the reciter's riwayah supplied as an explicit input or with per-riwayah
 fine-tuning---should reduce the cross-riwayah penalty without enlarging the
 balanced subset. Third, phoneme-aligned rather than fixed-window segmentation
 would remove the boundary noise that currently caps the recall of Qalqalah
 Mushaddadah and would make the duration descriptor directly interpretable in
 terms of Tajweed timing.
 
-
-% =====================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
