@@ -8,7 +8,7 @@ paper.tex with the *exact* Springer LNCS page geometry (printing area
 figure captions below; 9 pt bibliography) using ReportLab, and typesets every
 mathematics fragment with matplotlib's mathtext engine.
 
-build/manuscript_preview.pdf is therefore a pagination-faithful proxy: its
+article.pdf (repository root) is therefore a pagination-faithful proxy: its
 page count is the page-count estimate reported to the authors.  The
 authoritative deliverable remains paper.tex compiled with llncs.cls.
 
