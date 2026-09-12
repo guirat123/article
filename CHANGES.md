@@ -3,7 +3,7 @@
 Deliverable: **`paper.tex`** — a conference-ready manuscript in Springer LNCS
 format (`llncs.cls` v2.24, `splncs04.bst`), assembled from the eight supplied
 section documents, together with a paginated page-count proof
-(`build/manuscript_preview.pdf`) and an editable Word export
+(`article.pdf`) and an editable Word export
 (`build/manuscript_editable.docx`).
 
 ---
@@ -117,7 +117,7 @@ deliberately narrowed by 0.2 cm so the estimate is **conservative**.
 | Page budget breakdown (proxy) | front matter ≈0.7 · headings ≈2.0 · body ≈9.6 · tables ≈1.5 · figures ≈1.0 · equations ≈0.3 · references ≈0.9 |
 
 Re-run `python3 tools/render_preview.py` after any edit; it rewrites
-`build/manuscript_preview.pdf` and `build/pagecount.txt`. The authoritative
+`article.pdf` and `build/pagecount.txt`. The authoritative
 count is obtained by compiling `paper.tex` with pdfLaTeX + BibTeX, which the
 authors should do once (the source is pdfLaTeX-clean: no Arabic script, no
 external packages beyond `amsmath`, `graphicx`, `xcolor`, `url`, `microtype`).

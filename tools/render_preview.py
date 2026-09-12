@@ -546,7 +546,7 @@ def build():
 
 def main():
     flow = build()
-    out = os.path.join(ROOT, "build", "manuscript_preview.pdf")
+    out = os.path.join(ROOT, "article.pdf")
     doc = BaseDocTemplate(out, pagesize=A4,
                           leftMargin=(PAGE_W - FRAME_W) / 2,
                           rightMargin=(PAGE_W - FRAME_W) / 2,

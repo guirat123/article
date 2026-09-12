@@ -17,7 +17,7 @@ work stream.
 | `figures/fig3_cross_riwayah.pdf` | cross-riwayah Macro-F1 matrix (vector) |
 | `tools/make_figures.py` | regenerates the three figures from the reported numbers |
 | `tools/render_preview.py` | LNCS-geometry page-count proof renderer (no TeX needed) |
-| `build/manuscript_preview.pdf` | paginated proof used for the page estimate |
+| `article.pdf` | paginated proof used for the page estimate |
 | `build/pagecount.txt` | current proxy page count |
 | `build/manuscript_editable.docx` | Word export for line editing |
 | `*.docx` (root) | the original supplied section documents (input material) |
@@ -36,7 +36,7 @@ references, tables and figures**; the current content is estimated at **16**.
 ## Page-count proof without a TeX installation
 
 ```bash
-python3 tools/render_preview.py     # writes build/manuscript_preview.pdf + pagecount.txt
+python3 tools/render_preview.py     # writes article.pdf + pagecount.txt
 ```
 
 The renderer reproduces the LNCS printing area (12.2 × 19.3 cm on A4), the LNCS
